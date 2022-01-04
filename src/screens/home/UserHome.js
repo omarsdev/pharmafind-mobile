@@ -7,20 +7,27 @@ import {
   ActivityIndicator,
   Pressable,
   Image,
+  TextInput,
 } from 'react-native';
 
 import Header from './components/Header';
 import PharmacyCard from './components/PharmacyCard';
 
 import {UserHomeDataContext} from '../../context/UserHomeDataContext';
+import {AxiosInstance} from '../../api/axios-instance';
+
+import DeleteLogo from '../../assets/icons/delete.png';
 
 const UserHome = ({navigation}) => {
   const {userChatProviderValue, loadingProviderValue, pharmacyProviderValue} =
     useContext(UserHomeDataContext);
 
-  const {pharmacy} = pharmacyProviderValue;
+  const {pharmacy, setPharmacy} = pharmacyProviderValue;
   const {loading} = loadingProviderValue;
   const {userChat} = userChatProviderValue;
+
+  const [searchText, setSearchText] = useState('');
+  const [pharmacySearch, setPharmacySearch] = useState(null);
 
   const onPressPharmacyHandler = (
     pharmacyId,
@@ -44,6 +51,23 @@ const UserHome = ({navigation}) => {
     });
   };
 
+  const handleSetPharmacy = async text => {
+    setSearchText(text);
+    await AxiosInstance.get(`/pharamcy/search?search=${text}`)
+      .then(res => {
+        setPharmacySearch(res.data.data.rows);
+        // console.log(res.data.data);
+      })
+      .catch(err => {
+        console.log(err.response.data);
+      });
+  };
+
+  const resetSearch = () => {
+    setSearchText('');
+    setPharmacySearch(null);
+  };
+
   return !pharmacy || loading || !userChat ? (
     <View style={styles.spinnerContainer}>
       <ActivityIndicator color="#1a1a1a" />
@@ -56,22 +80,63 @@ const UserHome = ({navigation}) => {
           <View style={styles.headerStyle}>
             <Header />
           </View>
-          <View>
-            {pharmacy.map(e => (
+          <View style={styles.searchView}>
+            <TextInput
+              placeholder="Search for pharmacy"
+              placeholderTextColor="gray"
+              style={styles.searchViewTextInput}
+              value={searchText}
+              onChangeText={text => handleSetPharmacy(text)}
+            />
+            {searchText !== '' && (
               <Pressable
-                onPress={() =>
-                  onPressPharmacyHandler(
-                    e.id,
-                    e.name,
-                    e.photo,
-                    pharmacy.id,
-                    e.isOpen,
-                  )
-                }
-                key={e.id}>
-                <PharmacyCard data={e} />
+                style={{
+                  height: '100%',
+                  width: 40,
+                  position: 'absolute',
+                  right: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingRight: 20,
+                }}
+                onPress={resetSearch}>
+                <Image source={DeleteLogo} style={{width: 14, height: 14}} />
               </Pressable>
-            ))}
+            )}
+          </View>
+          <View>
+            {pharmacySearch
+              ? pharmacySearch.map(e => (
+                  <Pressable
+                    onPress={() =>
+                      onPressPharmacyHandler(
+                        e.id,
+                        e.name,
+                        e.photo,
+                        pharmacy.id,
+                        e.isOpen,
+                      )
+                    }
+                    key={e.id}>
+                    <PharmacyCard data={e} />
+                  </Pressable>
+                ))
+              : pharmacy.map(e => (
+                  <Pressable
+                    onPress={() =>
+                      onPressPharmacyHandler(
+                        e.id,
+                        e.name,
+                        e.photo,
+                        pharmacy.id,
+                        e.isOpen,
+                      )
+                    }
+                    key={e.id}>
+                    <PharmacyCard data={e} />
+                  </Pressable>
+                ))}
           </View>
         </View>
         <Pressable style={styles.locationView} onPress={moveLocationHandler}>
@@ -96,6 +161,24 @@ const styles = StyleSheet.create({
   headerStyle: {
     height: '5%',
     width: '100%',
+  },
+  searchView: {
+    width: '100%',
+    height: 40,
+    marginTop: 5,
+    marginBottom: 5,
+    position: 'relative',
+  },
+  searchViewTextInput: {
+    height: '100%',
+    width: '100%',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingLeft: 20,
+    left: 0,
+    color: 'black',
+    textAlign: 'left',
   },
   topNavbarColor: {
     backgroundColor: '#56B1D3',

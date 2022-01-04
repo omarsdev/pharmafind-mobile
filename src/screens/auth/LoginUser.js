@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
 import {
   Pressable,
@@ -25,16 +26,22 @@ export const LoginUser = ({navigation}) => {
     navigation.navigate('LoginPharmacist');
   };
 
+  const setStorage = async res => {
+    await AsyncStorage.setItem('token', res.data.token);
+    await AsyncStorage.setItem('isUser', 'true');
+  };
+
   const fetchApi = async () => {
     setError(null);
-    await AxiosInstance.post('/user/code', {
+    await AxiosInstance.post('/user/login', {
       email,
     })
       .then(res => {
         if (res.data.success) {
-          navigation.navigate('SMSCode', {
-            email,
-            isUser: true,
+          setStorage(res);
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'User'}],
           });
         }
       })
@@ -48,13 +55,14 @@ export const LoginUser = ({navigation}) => {
       <Image source={Pill} style={styles.imageStyle} />
       <Text>Login User</Text>
       <View>
-        <Text>Email</Text>
+        <Text>Phone Number</Text>
         <TextInput
           style={styles.textInputStyle}
-          placeholder="Enter your email"
+          placeholder="Enter your phone number"
           placeholderTextColor={'#1a1a1a'}
           value={email}
           onChangeText={text => setEmail(text)}
+          keyboardType="phone-pad"
         />
       </View>
       <Pressable style={styles.submit} onPress={fetchApi}>

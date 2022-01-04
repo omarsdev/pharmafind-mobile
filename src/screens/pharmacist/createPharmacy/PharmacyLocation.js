@@ -16,6 +16,7 @@ import {NavigationContainerRefContext} from '@react-navigation/native';
 const PharmacyLocation = ({route, navigation}) => {
   const [region, setRegion] = useState(null);
   const [selectedMark, setSelectedMark] = useState(null);
+  const [isButtonClick, setIsButtonClick] = useState(false);
 
   const map = useRef(null);
 
@@ -42,6 +43,8 @@ const PharmacyLocation = ({route, navigation}) => {
   }, []);
 
   const onSubmit = async () => {
+    if (isButtonClick) return;
+    setIsButtonClick(true);
     const data = {
       details: route.params.pharmacyDescription,
       locationDescription: route.params.pharmacyLocation,
@@ -57,6 +60,9 @@ const PharmacyLocation = ({route, navigation}) => {
       })
       .catch(err => {
         console.log(err.response.data);
+      })
+      .finally(() => {
+        setIsButtonClick(false);
       });
   };
 

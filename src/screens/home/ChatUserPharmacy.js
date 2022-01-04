@@ -34,6 +34,8 @@ import {Alert} from 'react-native';
 import SendLogo from '../../assets/icons/send.png';
 import CameraLogo from '../../assets/icons/camera.png';
 
+import {KeyboardShift} from '../../utils/KeyboardShift';
+
 const ChatUserPharmacy = ({route, navigation}) => {
   const {
     sendMessage,
@@ -168,7 +170,7 @@ const ChatUserPharmacy = ({route, navigation}) => {
       <ActivityIndicator color="#1a1a1a" />
     </View>
   ) : (
-    <Fragment>
+    <KeyboardShift>
       <SafeAreaView style={styles.topNavbarColor} />
       <SafeAreaView style={styles.bottomNavbarColor}>
         <View style={styles.containerView}>
@@ -254,7 +256,7 @@ const ChatUserPharmacy = ({route, navigation}) => {
           })} */}
         </View>
       </SafeAreaView>
-    </Fragment>
+    </KeyboardShift>
   );
 };
 
@@ -281,6 +283,7 @@ const styles = StyleSheet.create({
   containerView: {
     flex: 1,
     backgroundColor: 'white',
+    height: 400 - 365,
   },
   chatPage: {
     flex: 1,
@@ -308,3 +311,19 @@ const styles = StyleSheet.create({
     height: 25,
   },
 });
+
+// import React from 'react';
+// import {Text, View} from 'react-native';
+// import {KeyboardShift} from '../../utils/KeyboardShift';
+
+// const ChatUserPharmacy = () => {
+//   return (
+//     <KeyboardShift>
+//       <View>
+//         <Text>HEllo</Text>
+//       </View>
+//     </KeyboardShift>
+//   );
+// };
+
+// export default ChatUserPharmacy;

@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {
   Pressable,
@@ -18,6 +19,11 @@ export const SubmitPharmacist = ({navigation}) => {
   const [name, setName] = useState('');
   const [error, setError] = useState(null);
 
+  const setStorage = async res => {
+    await AsyncStorage.setItem('token', res.data.token);
+    await AsyncStorage.setItem('isUser', 'false');
+  };
+
   const loginPharmacistHandler = async () => {
     setError(null);
     await AxiosInstance.post('/pharmacist', {
@@ -26,10 +32,16 @@ export const SubmitPharmacist = ({navigation}) => {
     })
       .then(res => {
         if (res.data.success) {
-          navigation.navigate('SMSCode', {
-            email,
-            isUser: false,
+          setStorage(res);
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'PharmacistRoot'}],
           });
+
+          // navigation.navigate('SMSCode', {
+          //   email,
+          //   isUser: false,
+          // });
         }
       })
       .catch(err => {
@@ -61,13 +73,14 @@ export const SubmitPharmacist = ({navigation}) => {
         />
       </View>
       <View>
-        <Text>Email</Text>
+        <Text>Phone Number</Text>
         <TextInput
           style={styles.textInputStyle}
-          placeholder="Enter your email"
+          placeholder="Enter your phone number"
           placeholderTextColor={'#1a1a1a'}
           value={email}
           onChangeText={text => setEmail(text)}
+          keyboardType="phone-pad"
         />
       </View>
       <Pressable style={styles.submit} onPress={loginPharmacistHandler}>

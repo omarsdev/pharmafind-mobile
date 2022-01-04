@@ -6,7 +6,7 @@ import {API_BASE} from '../api/axios-instance';
 
 let socket;
 export const initiateSocketConnection = room => {
-  socket = io('http://129.1.1.1:3000', {
+  socket = io('http://89.233.108.199:5005', {
     auth: {
       token: AsyncStorage.getItem('token'),
     },

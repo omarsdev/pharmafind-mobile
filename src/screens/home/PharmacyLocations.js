@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {AxiosInstance} from '../../api/axios-instance';
+import Geolocation from 'react-native-geolocation-service';
 
 const PharmacyLocations = ({route, navigation}) => {
   const {pharmacy} = route.params;
   const [pharmacyLocation, setPharmacyLocation] = useState(null);
+  const [region, setRegion] = useState(null);
 
   const getPharmacy = async () => {
     await AxiosInstance.get('/pharamcy/location')
@@ -25,6 +27,21 @@ const PharmacyLocations = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    Geolocation.getCurrentPosition(
+      position => {
+        setRegion({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      },
+      error => {
+        // See error code charts below.
+        console.log(error.code, error.message);
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
     getPharmacy();
   }, []);
 
@@ -34,21 +51,13 @@ const PharmacyLocations = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      {!pharmacyLocation ? (
+      {!pharmacyLocation || !region ? (
         <View>
           <ActivityIndicator color="#1a1a1a" />
         </View>
       ) : (
         <View style={styles.mapStyle}>
-          <MapView
-            style={styles.mapStyle}
-            //specify our coordinates.
-            initialRegion={{
-              latitude: Number(pharmacyLocation[0].latitude),
-              longitude: Number(pharmacyLocation[0].longitude),
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}>
+          <MapView style={styles.mapStyle} region={region}>
             {pharmacyLocation.map((e, i) => (
               <Marker
                 key={i}

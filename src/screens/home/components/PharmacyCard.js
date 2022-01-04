@@ -37,15 +37,20 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 70,
 
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 4,
+    // },
+    // shadowOpacity: 0.32,
+    // shadowRadius: 5.46,
 
-    elevation: 9,
+    // elevation: 9,
+
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+
+    backgroundColor: 'white',
   },
   topContainer: {
     flex: 1,

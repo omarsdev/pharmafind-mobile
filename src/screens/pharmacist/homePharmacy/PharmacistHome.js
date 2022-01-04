@@ -14,6 +14,7 @@ import moment from 'moment';
 import {AxiosInstance} from '../../../api/axios-instance';
 import Header from './components/Header';
 import {UserDataContext} from '../../../context';
+import {removeAllLocalStorage} from '../../../utils';
 
 const PharmacistHome = ({navigation}) => {
   const {
@@ -27,8 +28,23 @@ const PharmacistHome = ({navigation}) => {
   const {pharmacyChat, setPharmacyChat} = pharmacyChatProviderValue;
   const {loading} = loadingProviderValue;
   const {pharmacistDataProviderValue} = useContext(UserDataContext);
-  const {pharmacistData} = pharmacistDataProviderValue;
+  const {pharmacistData, setPharmacistData} = pharmacistDataProviderValue;
   const socketRef = socketRefProviderValue;
+
+  const getMePharmacist = async () => {
+    await AxiosInstance.get('/pharmacist/me')
+      .then(res => {
+        setPharmacistData(res.data.data);
+      })
+      .catch(err => {
+        console.log(err.response.data);
+        removeAllLocalStorage();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Welcome'}],
+        });
+      });
+  };
 
   const getAllUsersMessage = async () => {
     await AxiosInstance.get('/pharamcy/message')
@@ -44,6 +60,7 @@ const PharmacistHome = ({navigation}) => {
 
   useEffect(() => {
     getAllUsersMessage();
+    getMePharmacist();
   }, []);
 
   useEffect(() => {
@@ -69,46 +86,48 @@ const PharmacistHome = ({navigation}) => {
   }, [receiveMessage]);
 
   return (
-    // <SafeAreaView style={styles.container}>
-    // </SafeAreaView>
-    <Fragment>
-      <SafeAreaView style={styles.topNavbarColor} />
-      <SafeAreaView style={styles.bottomNavbarColor}>
-        <View style={styles.containerView}>
-          <View style={styles.headerStyle}>
-            <Header />
-          </View>
-          <View>
-            {!pharmacyChat ? (
-              <View style={styles.viewSpinner}>
-                <ActivityIndicator color="#1a1a1a" />
-              </View>
-            ) : (
-              Array.isArray(pharmacyChat) &&
-              pharmacyChat.map(e => (
-                <Pressable
-                  key={e.id}
-                  onPress={() =>
-                    navigation.navigate('PharmacistChat', {
-                      userId: e.User.id,
-                    })
-                  }>
-                  <View style={styles.userCardView}>
-                    <View style={styles.nameMessageView}>
-                      <Text style={styles.userName}>{e.User.name}</Text>
-                      <Text>{e.Messages[0].message}</Text>
+    pharmacistData && (
+      // <SafeAreaView style={styles.container}>
+      // </SafeAreaView>
+      <Fragment>
+        <SafeAreaView style={styles.topNavbarColor} />
+        <SafeAreaView style={styles.bottomNavbarColor}>
+          <View style={styles.containerView}>
+            <View style={styles.headerStyle}>
+              <Header />
+            </View>
+            <View>
+              {!pharmacyChat ? (
+                <View style={styles.viewSpinner}>
+                  <ActivityIndicator color="#1a1a1a" />
+                </View>
+              ) : (
+                Array.isArray(pharmacyChat) &&
+                pharmacyChat.map(e => (
+                  <Pressable
+                    key={e.id}
+                    onPress={() =>
+                      navigation.navigate('PharmacistChat', {
+                        userId: e.User.id,
+                      })
+                    }>
+                    <View style={styles.userCardView}>
+                      <View style={styles.nameMessageView}>
+                        <Text style={styles.userName}>{e.User.name}</Text>
+                        <Text>{e.Messages[0].message}</Text>
+                      </View>
+                      <Text style={styles.textTime}>
+                        {moment(e.Messages[0].createdAt).format('hh:mm a')}
+                      </Text>
                     </View>
-                    <Text style={styles.textTime}>
-                      {moment(e.Messages[0].createdAt).format('hh:mm a')}
-                    </Text>
-                  </View>
-                </Pressable>
-              ))
-            )}
+                  </Pressable>
+                ))
+              )}
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
-    </Fragment>
+        </SafeAreaView>
+      </Fragment>
+    )
   );
 };
 

@@ -18,6 +18,7 @@ import HeaderChat from './components/HeaderChat';
 import Message from './components/Message';
 
 import SendLogo from '../../../assets/icons/send.png';
+import {KeyboardShift} from '../../../utils/KeyboardShift';
 
 const PharmacistChat = ({route, navigation}) => {
   const {pharmacistDataProviderValue} = useContext(UserDataContext);
@@ -26,6 +27,7 @@ const PharmacistChat = ({route, navigation}) => {
     useContext(PharmacyDataContext);
   const {receiveMessage, setReceiveMessage} = receiveMessageProviderValue;
   const socketRef = socketRefProviderValue;
+
   const {userId} = route.params;
 
   const [chat, setChat] = useState(null);
@@ -97,7 +99,7 @@ const PharmacistChat = ({route, navigation}) => {
       <ActivityIndicator color="#1a1a1a" />
     </View>
   ) : (
-    <Fragment>
+    <KeyboardShift>
       <SafeAreaView style={styles.topNavbarColor} />
       <SafeAreaView style={styles.bottomNavbarColor}>
         <View style={styles.containerView}>
@@ -131,7 +133,7 @@ const PharmacistChat = ({route, navigation}) => {
           </View>
         </View>
       </SafeAreaView>
-    </Fragment>
+    </KeyboardShift>
   );
 };
 
@@ -171,6 +173,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: 'black',
+    color: 'black',
     borderRadius: 30,
     paddingLeft: 10,
   },

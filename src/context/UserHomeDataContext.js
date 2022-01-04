@@ -33,6 +33,15 @@ export const UserHomeDataContextProvider = props => {
   const getPharmacy = async () => {
     await AxiosInstance.get(`/pharamcy?timeZone=${RNLocalize.getTimeZone()}`)
       .then(res => {
+        // setPharmacy(
+        //   res.data.data.sort((a, b) => {
+        //     if (a.isOpen !== b.isOpen) {
+        //       return a.isOpen ? -1 : 1;
+        //     } else {
+        //       return a.name > b.name ? 1 : -1;
+        //     }
+        //   }),
+        // );
         setPharmacy(res.data.data);
       })
       .catch(err => {
@@ -70,6 +79,7 @@ export const UserHomeDataContextProvider = props => {
     });
 
     socketRef.current.on('pharmacy-online-offline', data => {
+      console.log(data);
       setPharmacyOnlineOffline(data);
     });
   }, [socketRef]);

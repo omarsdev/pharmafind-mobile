@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, Switch, Pressable, Image} from 'react-native';
 import {AxiosInstance} from '../../../../api/axios-instance';
 import {UserDataContext} from '../../../../context';
 import {PharmacyDataContext} from '../../../../context/PharmacyDataContext';
-
+import Logo from '../../../../assets/image/logo.png';
 const Header = () => {
   const {pharmacyChatProviderValue, PharmacyOnlineOffline} =
     useContext(PharmacyDataContext);
@@ -21,7 +21,9 @@ const Header = () => {
     });
   };
 
-  const [isEnabled, setIsEnabled] = useState(pharmacistData.Pharmacy.isOpen);
+  const [isEnabled, setIsEnabled] = useState(
+    pharmacistData?.Pharmacy?.isOpen || false,
+  );
   const toggleSwitch = () => {
     updateOpenHandler(!isEnabled);
     PharmacyOnlineOffline({
@@ -39,7 +41,7 @@ const Header = () => {
 
   return (
     <View style={styles.container}>
-      <Text>PharmaFind</Text>
+      <Image source={Logo} style={styles.imageStyle} />
       <View
         style={{
           flex: 1,
@@ -75,5 +77,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: '5%',
     paddingRight: '5%',
+  },
+  imageStyle: {
+    height: 20,
+    width: 150,
   },
 });

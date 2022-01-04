@@ -19,11 +19,14 @@ export const Welcome = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.view}>
         <Image source={Pill} style={styles.imageStyle} />
-        <Text>PharamFind</Text>
+        <Text>Welcome</Text>
         <Text>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam
-          repudiandae nesciunt earum facere sed recusandae in magni at sit eum
-          nobis quos, odio laborum laboriosam quas ducimus ex ipsam reiciendis.
+          Pharmafind is an app that gives you an easy and fast way to connect
+          with available pharmacies close to you. The application allows you to
+          communicate with the pharmacy and inquire about any drug or medical
+          product via text messages or by sending a picture of the prescription
+          issued by the doctor with the ability to reserve the drug for a
+          specified period of time by the pharmacist.
         </Text>
       </View>
       <Pressable style={styles.clickContinue} onPress={navigationHandler}>
