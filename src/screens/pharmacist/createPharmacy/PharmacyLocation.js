@@ -11,7 +11,8 @@ import MapView, {Marker} from 'react-native-maps';
 
 import Geolocation from 'react-native-geolocation-service';
 import {AxiosInstance} from '../../../api/axios-instance';
-import {NavigationContainerRefContext} from '@react-navigation/native';
+
+import {removeAllLocalStorage} from '../../../utils';
 
 const PharmacyLocation = ({route, navigation}) => {
   const [region, setRegion] = useState(null);
@@ -56,7 +57,12 @@ const PharmacyLocation = ({route, navigation}) => {
     };
     await AxiosInstance.post('/pharamcy', data)
       .then(res => {
-        navigation.navigate('PharmacyHomeStack');
+        removeAllLocalStorage();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'LoginPharmacist'}],
+        });
+        // navigation.navigate('PharmacyHomeStack');
       })
       .catch(err => {
         console.log(err.response.data);
