@@ -30,7 +30,13 @@ export const Welcome = ({navigation}) => {
         </Text>
       </View>
       <Pressable style={styles.clickContinue} onPress={navigationHandler}>
-        <Text>Click Here to continue </Text>
+        <Button
+                              variant="contained"
+                              style={{
+                                margin: 10,
+                                backgroundColor: '#54DA54',
+                                left: 500,
+                              }}> click here to continue </button>
       </Pressable>
     </SafeAreaView>
   );
