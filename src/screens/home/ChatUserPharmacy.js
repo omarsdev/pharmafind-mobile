@@ -191,7 +191,9 @@ const ChatUserPharmacy = ({route, navigation}) => {
                 scrollViewRef.current.scrollToEnd({animated: true})
               }>
               {chatOpen.map((e, i) => (
-                <Message e={e} key={i} />
+                <View key={i} style={i === 0 && {marginTop: 10}}>
+                  <Message e={e} />
+                </View>
               ))}
             </ScrollView>
           </View>

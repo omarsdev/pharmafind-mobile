@@ -115,7 +115,9 @@ const PharmacistChat = ({route, navigation}) => {
                 scrollViewRef.current.scrollToEnd({animated: true})
               }>
               {chat.map((e, i) => (
-                <Message e={e} key={i} />
+                <View key={i} style={i === 0 && {marginTop: 10}}>
+                  <Message e={e} key={i} />
+                </View>
               ))}
             </ScrollView>
           </View>
