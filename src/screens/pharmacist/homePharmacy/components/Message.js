@@ -12,9 +12,7 @@ const Message = ({e}) => {
           e.fromUserId ? styles.receiverColor : styles.senderColor,
         ]}>
         {e.message.startsWith('http') ? (
-          <View>
-            <Image source={{uri: e.message}} style={styles.photoView} />
-          </View>
+          <Image source={{uri: e.message}} style={styles.photoView} />
         ) : (
           <Fragment>
             <Text style={styles.messageText}>{e.message}</Text>
@@ -47,9 +45,11 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   photoView: {
-    width: 200,
-    height: 200,
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
     transform: [{rotate: '90deg'}],
+    borderRadius: 10,
   },
   receiverColor: {
     backgroundColor: '#C8CDCE',
