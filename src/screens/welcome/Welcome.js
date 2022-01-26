@@ -19,18 +19,13 @@ export const Welcome = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.view}>
         <Image source={Pill} style={styles.imageStyle} />
-        <Text>Welcome</Text>
+        <h3>Welcome to PharmaFind..</h3>
         <Text>
-          Pharmafind is an app that gives you an easy and fast way to connect
-          with available pharmacies close to you. The application allows you to
-          communicate with the pharmacy and inquire about any drug or medical
-          product via text messages or by sending a picture of the prescription
-          issued by the doctor with the ability to reserve the drug for a
-          specified period of time by the pharmacist.
+         The first medical chatting mobile application in syria. 
         </Text>
       </View>
       <Pressable style={styles.clickContinue} onPress={navigationHandler}>
-        <Text style={styles.clickContinue}>Click Here to continue </Text>
+        <Text style={styles.clickContinue}> Continue </Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -58,6 +53,6 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0d669e'
+    backgroundColor: '#2281E5'
   },
 });
