@@ -134,10 +134,9 @@ const styles = StyleSheet.create({
   pharmacist: {
     width: 150,
     height: 40,
-    backgroundColor: '#2EC3B2',
+    backgroundColor: '#2281E5',
     borderRadius: 12,
-    borderColor: 'black',
-    borderWidth: 1,
+    
   },
   submitText: {
     marginTop: 'auto',
